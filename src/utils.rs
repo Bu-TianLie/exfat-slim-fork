@@ -49,8 +49,8 @@ pub(crate) fn encode_utf16_upcase_and_hash(
         let c = upcase_table.upcase(c);
         let byte0 = (c & 0xFF) as u8;
         let byte1 = (c >> 8) as u8;
-        hash = if hash & 1 > 0 { 0x8000 } else { 0 } + hash.wrapping_shr(1) + byte0 as u16;
-        hash = if hash & 1 > 0 { 0x8000 } else { 0 } + hash.wrapping_shr(1) + byte1 as u16;
+        hash = hash.rotate_right(1).wrapping_add(u16::from(byte0));
+        hash = hash.rotate_right(1).wrapping_add(u16::from(byte1));
     }
 
     if count == 0 {
